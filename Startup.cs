@@ -8,11 +8,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ToDoList.Data;
+
 
 namespace ToDoList
 {
@@ -31,7 +33,11 @@ namespace ToDoList
             services.AddDbContext<ToDoListContext>(opt => opt.UseSqlServer
                 (Configuration.GetConnectionString("ToDoListConnection")));
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(s => {
+                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddScoped<IToDoList, SqlToDoList>();
 

@@ -15,6 +15,25 @@ namespace ToDoList.Data
             _context = context;
         }
 
+        public void CreateJob(Job job)
+        {
+            if(job is null)
+            {
+                throw new ArgumentNullException(nameof(job));
+            }
+            _context.Jobs.Add(job);
+            SaveChanges();
+        }
+
+        public void DeleteJob(Job job)
+        {
+            if(job is null)
+            {
+                throw new ArgumentNullException(nameof(job));
+            }
+            _context.Jobs.Remove(job);
+        }
+
         public IEnumerable<Job> GetAllJobs()
         {
             return _context.Jobs.ToList();
@@ -23,6 +42,16 @@ namespace ToDoList.Data
         public Job GetJobById(int id)
         {
             return _context.Jobs.FirstOrDefault(i => i.Id == id);
+        }
+
+        public bool SaveChanges()
+        {
+            return (_context.SaveChanges() >= 0);
+        }
+
+        public void UpdateJob(Job job)
+        {
+            //
         }
     }
 }
