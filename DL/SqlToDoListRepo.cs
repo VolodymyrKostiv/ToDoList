@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ToDoList.Models;
 
-namespace ToDoList.Data
+namespace ToDoList.DL
 {
-    public class SqlToDoList : IToDoList
+    public class SqlToDoListRepo : IToDoListRepo
     {
         private readonly ToDoListContext _context;
 
-        public SqlToDoList(ToDoListContext context)
+        public SqlToDoListRepo(ToDoListContext context)
         {
             _context = context;
+        }
+
+        public bool SaveChanges()
+        {
+            return (_context.SaveChanges() >= 0);
         }
 
         public void CreateJob(Job job)
@@ -22,7 +26,6 @@ namespace ToDoList.Data
                 throw new ArgumentNullException(nameof(job));
             }
             _context.Jobs.Add(job);
-            SaveChanges();
         }
 
         public void DeleteJob(Job job)
@@ -42,11 +45,6 @@ namespace ToDoList.Data
         public Job GetJobById(int id)
         {
             return _context.Jobs.FirstOrDefault(i => i.Id == id);
-        }
-
-        public bool SaveChanges()
-        {
-            return (_context.SaveChanges() >= 0);
         }
 
         public void UpdateJob(Job job)

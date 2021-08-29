@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using ToDoList.Models;
 
-namespace ToDoList.Data
+namespace ToDoList.DL
 {
-    public interface IToDoList
+    public interface IToDoListRepo
     {
         bool SaveChanges();
 

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ToDoList.Models;
 
 namespace ToDoList.DTO
@@ -12,7 +9,11 @@ namespace ToDoList.DTO
 
         public string Description { get; set; }
 
+        public string WhoAssigned { get; set; }
+
         public string AssignedTo { get; set; }
+
+        public DateTime DateOfAssigning { get; set; }
 
         public DateTime DueToDate { get; set; }
 

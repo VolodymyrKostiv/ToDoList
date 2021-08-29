@@ -3,11 +3,9 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using ToDoList.Data;
 using ToDoList.DTO;
 using ToDoList.Models;
+using ToDoList.Services;
 
 namespace ToDoList.Controllers
 {
@@ -16,12 +14,12 @@ namespace ToDoList.Controllers
     [ApiController]
     public class JobsController : ControllerBase
     {
-        private readonly IToDoList _doList;
+        private readonly IJobService _jobService;
         private readonly IMapper _mapper;
 
-        public JobsController(IToDoList doList, IMapper mapper)
+        public JobsController(IJobService jobService, IMapper mapper)
         {
-            _doList = doList;
+            _jobService = jobService;
             _mapper = mapper;
         }
 
@@ -29,7 +27,7 @@ namespace ToDoList.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<JobReadDto>> GetAllJobs()
         {
-            IEnumerable <Job> jobs = _doList.GetAllJobs();
+            IEnumerable <Job> jobs = _jobService.GetAllJobs();
 
             return Ok(_mapper.Map<IEnumerable<JobReadDto>>(jobs));
         }
@@ -38,7 +36,7 @@ namespace ToDoList.Controllers
         [HttpGet("{id}", Name = "GetJobById")]
         public ActionResult<JobReadDto> GetJobById(int id)
         {
-            Job job = _doList.GetJobById(id);
+            Job job = _jobService.GetJobById(id);
 
             return (job is not null) ? Ok(_mapper.Map<JobReadDto>(job)) : NotFound();
         }
@@ -47,11 +45,7 @@ namespace ToDoList.Controllers
         [HttpPost]
         public ActionResult<JobReadDto> CreateJob(JobCreateDto jobCreateDto)
         {
-            Job jobModel = _mapper.Map<Job>(jobCreateDto);
-
-            _doList.CreateJob(jobModel);
-
-            _doList.SaveChanges();
+            Job jobModel = _jobService.CreateJob(jobCreateDto);
 
             JobReadDto jobReadDto = _mapper.Map<JobReadDto>(jobModel);
 
@@ -62,43 +56,12 @@ namespace ToDoList.Controllers
         [HttpPut("{id}")]
         public ActionResult UpdateJob(int id, JobUpdateDto jobUpdateDto)
         {
-            Job jobModel = _doList.GetJobById(id);
-            if(jobModel is null)
+            if(jobUpdateDto == null)
             {
                 return NotFound();
             }
 
-            _mapper.Map(jobUpdateDto, jobModel);
-
-            _doList.UpdateJob(jobModel);
-
-            _doList.SaveChanges();
-
-            return NoContent();
-        }
-
-        //PATCH api/jobs/{id}
-        [HttpPatch("{id}")]
-        public ActionResult PartialJobUpdate(int id, JsonPatchDocument<JobUpdateDto> jsonPatchDocument)
-        {
-            Job jobModel = _doList.GetJobById(id);
-            if (jobModel is null)
-            {
-                return NotFound();
-            }
-
-            JobUpdateDto jobToPatch = _mapper.Map<JobUpdateDto>(jobModel);
-            jsonPatchDocument.ApplyTo(jobToPatch, ModelState);
-            if(!TryValidateModel(jobToPatch))
-            {
-                return ValidationProblem(ModelState);
-            }
-
-            _mapper.Map(jobToPatch, jobModel);
-
-            _doList.UpdateJob(jobModel);
-
-            _doList.SaveChanges();
+            _jobService.UpdateJob(jobUpdateDto);
 
             return NoContent();
         }
@@ -107,18 +70,7 @@ namespace ToDoList.Controllers
         [HttpDelete("{id}")]
         public ActionResult DeleteJob(int id)
         {
-            Job jobModel = _doList.GetJobById(id);
-            if (jobModel is null)
-            {
-                return NotFound();
-            }
-
-            _doList.DeleteJob(jobModel);
-
-            _doList.SaveChanges();
-
-            return NoContent();
+            return _jobService.DeleteJob(id) ? NoContent() : NotFound();
         }
-
     }
 }

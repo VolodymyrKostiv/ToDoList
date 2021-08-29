@@ -1,25 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using ToDoList.Models;
 
 namespace ToDoList.DTO
 {
     public class JobCreateDto
     {
-        [Required]
         public string Title { get; set; }
 
         public string Description { get; set; }
 
-        [Required]
+        public string WhoAssigned { get; set; }
+
         public string AssignedTo { get; set; }
 
-        [Required]
-        public DateTime DueToDate { get; set; }
+        public DateTime? DateOfAssigning { get; set; }
 
-        public JobStatus Status { get; set; }
+        public DateTime DueToDate { get; set; }
     }
 }
