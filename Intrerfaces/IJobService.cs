@@ -9,7 +9,7 @@ namespace ToDoList.Services
         IEnumerable<Job> GetAllJobs();
         Job GetJobById(int id);
         Job CreateJob(JobCreateDto job);
-        void UpdateJob(JobUpdateDto job);
+        bool UpdateJob(JobUpdateDto job, int id);
         bool DeleteJob(int id);
     }
 }

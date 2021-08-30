@@ -12,6 +12,12 @@ namespace ToDoList.Services
         private readonly IToDoListRepo _doList;
         private readonly IMapper _mapper;
 
+        public JobService(IToDoListRepo doList, IMapper mapper)
+        {
+            _doList = doList;
+            _mapper = mapper;
+        }
+
         public Job CreateJob(JobCreateDto job)
         {
             Job jobModel = _mapper.Map<Job>(job);
@@ -52,9 +58,21 @@ namespace ToDoList.Services
             return _doList.GetJobById(id);
         }
 
-        public void UpdateJob(JobUpdateDto job)
+        public bool UpdateJob(JobUpdateDto jobUpdateDto, int id)
         {
-            //
+            Job jobToUpdate = _doList.GetJobById(id);
+            if(jobToUpdate == null)
+            {
+                return false;
+            }
+
+            _mapper.Map(jobUpdateDto, jobToUpdate);
+
+            _doList.UpdateJob(jobToUpdate);
+
+            _doList.SaveChanges();
+
+            return true;
         }
     }
 }

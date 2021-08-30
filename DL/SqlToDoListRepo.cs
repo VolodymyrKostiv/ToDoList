@@ -21,7 +21,7 @@ namespace ToDoList.DL
 
         public void CreateJob(Job job)
         {
-            if(job is null)
+            if(job == null)
             {
                 throw new ArgumentNullException(nameof(job));
             }
@@ -30,7 +30,7 @@ namespace ToDoList.DL
 
         public void DeleteJob(Job job)
         {
-            if(job is null)
+            if(job == null)
             {
                 throw new ArgumentNullException(nameof(job));
             }

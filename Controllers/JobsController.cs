@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using ToDoList.DTO;
 using ToDoList.Models;
@@ -10,7 +8,7 @@ using ToDoList.Services;
 namespace ToDoList.Controllers
 {
     //      api/jobs
-    [Route("api/[controller")]
+    [Route("api/[controller]")]
     [ApiController]
     public class JobsController : ControllerBase
     {
@@ -38,7 +36,7 @@ namespace ToDoList.Controllers
         {
             Job job = _jobService.GetJobById(id);
 
-            return (job is not null) ? Ok(_mapper.Map<JobReadDto>(job)) : NotFound();
+            return (job != null) ? Ok(_mapper.Map<JobReadDto>(job)) : NotFound();
         }
 
         //POST api/jobs
@@ -61,7 +59,7 @@ namespace ToDoList.Controllers
                 return NotFound();
             }
 
-            _jobService.UpdateJob(jobUpdateDto);
+            _jobService.UpdateJob(jobUpdateDto, id);
 
             return NoContent();
         }

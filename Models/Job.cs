@@ -12,6 +12,7 @@ namespace ToDoList.Models
         [MaxLength(100)]
         public string Title { get; set; }
 
+        [Required]
         [MaxLength(300)]
         public string Description { get; set; }
 
@@ -23,11 +24,13 @@ namespace ToDoList.Models
         [MaxLength(50)]
         public string AssignedTo { get; set; }
 
+        [Required]
         public DateTime DateOfAssigning { get; set; }
 
         [Required]
         public DateTime DueToDate { get; set; }
 
+        [Required]
         public JobStatus Status { get; set; }
     }
 }
