@@ -13,7 +13,7 @@ namespace ToDoList.DTO
 
         public string AssignedTo { get; set; }
 
-        public DateTime DateOfAssigning { get; set; }
+        public DateTime? DateOfAssigning { get; set; }
 
         public DateTime DueToDate { get; set; }
 

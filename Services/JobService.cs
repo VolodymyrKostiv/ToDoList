@@ -23,7 +23,15 @@ namespace ToDoList.Services
             Job jobModel = _mapper.Map<Job>(job);
 
             if (job.DateOfAssigning == null)
-                jobModel.DateOfAssigning = DateTime.Now;
+            {
+                jobModel.DateOfAssigning = DateTime.UtcNow;
+            }
+            
+            if (jobModel.DateOfAssigning > job.DueToDate)
+            {
+                return null;
+            }
+
             jobModel.Status = JobStatus.Waiting;
 
             _doList.CreateJob(jobModel);
@@ -36,7 +44,7 @@ namespace ToDoList.Services
         public bool DeleteJob(int id)
         {
             Job jobModel = _doList.GetJobById(id);
-            if(jobModel == null)
+            if (jobModel == null)
             {
                 return false;
             }
@@ -61,7 +69,15 @@ namespace ToDoList.Services
         public bool UpdateJob(JobUpdateDto jobUpdateDto, int id)
         {
             Job jobToUpdate = _doList.GetJobById(id);
-            if(jobToUpdate == null)
+            if (jobToUpdate == null)
+            {
+                return false;
+            }
+            if (jobUpdateDto.DateOfAssigning == null)
+            {
+                jobUpdateDto.DateOfAssigning = DateTime.UtcNow;
+            }
+            if (jobUpdateDto.DateOfAssigning > jobUpdateDto.DueToDate)
             {
                 return false;
             }

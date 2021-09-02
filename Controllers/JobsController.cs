@@ -21,7 +21,7 @@ namespace ToDoList.Controllers
             _mapper = mapper;
         }
 
-        //GET api/jobs
+        //GET api/jobs/
         [HttpGet]
         public ActionResult<IEnumerable<JobReadDto>> GetAllJobs()
         {
@@ -39,11 +39,16 @@ namespace ToDoList.Controllers
             return (job != null) ? Ok(_mapper.Map<JobReadDto>(job)) : NotFound();
         }
 
-        //POST api/jobs
+        //POST api/jobs/
         [HttpPost]
         public ActionResult<JobReadDto> CreateJob(JobCreateDto jobCreateDto)
         {
             Job jobModel = _jobService.CreateJob(jobCreateDto);
+
+            if(jobModel == null)
+            {
+                return BadRequest("Wrong data format");
+            }
 
             JobReadDto jobReadDto = _mapper.Map<JobReadDto>(jobModel);
 
@@ -59,9 +64,7 @@ namespace ToDoList.Controllers
                 return NotFound();
             }
 
-            _jobService.UpdateJob(jobUpdateDto, id);
-
-            return NoContent();
+            return _jobService.UpdateJob(jobUpdateDto, id) ? NoContent() : BadRequest("Can't update");
         }
 
         //DELETE api/jobs/{id}
