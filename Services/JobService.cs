@@ -20,6 +20,11 @@ namespace ToDoList.Services
 
         public Job CreateJob(JobCreateDto job)
         {
+            if(job == null)
+            {
+                return null;
+            }
+
             Job jobModel = _mapper.Map<Job>(job);
 
             if (job.DateOfAssigning == null)

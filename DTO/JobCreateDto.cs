@@ -15,5 +15,34 @@ namespace ToDoList.DTO
         public DateTime? DateOfAssigning { get; set; }
 
         public DateTime DueToDate { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (obj is JobCreateDto job)
+            {
+                return
+                    Title == job.Title &&
+                    Description == job.Description &&
+                    WhoAssigned == job.WhoAssigned &&
+                    AssignedTo == job.AssignedTo &&
+                    DateOfAssigning == job.DateOfAssigning &&
+                    DueToDate == job.DueToDate;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return (Title, Description, WhoAssigned, AssignedTo,
+                DateOfAssigning, DueToDate).GetHashCode();
+        }
     }
 }
