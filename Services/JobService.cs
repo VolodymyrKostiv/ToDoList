@@ -71,23 +71,23 @@ namespace ToDoList.Services
             return _doList.GetJobById(id);
         }
 
-        public bool UpdateJob(JobUpdateDto jobUpdateDto, int id)
+        public bool UpdateJob(JobUpdateDto job, int id)
         {
             Job jobToUpdate = _doList.GetJobById(id);
             if (jobToUpdate == null)
             {
                 return false;
             }
-            if (jobUpdateDto.DateOfAssigning == null)
+            if (job.DateOfAssigning == null)
             {
-                jobUpdateDto.DateOfAssigning = DateTime.UtcNow;
+                job.DateOfAssigning = DateTime.UtcNow;
             }
-            if (jobUpdateDto.DateOfAssigning > jobUpdateDto.DueToDate)
+            if (job.DateOfAssigning > job.DueToDate)
             {
                 return false;
             }
 
-            _mapper.Map(jobUpdateDto, jobToUpdate);
+            _mapper.Map(job, jobToUpdate);
 
             _doList.UpdateJob(jobToUpdate);
 
